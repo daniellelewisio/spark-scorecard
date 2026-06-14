@@ -326,21 +326,29 @@ ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
 </script>
 
 <script>
-  // Auto-height reporter: tells the parent page how tall the tool is, so the
-  // Squarespace iframe can resize and never clip the results screen.
+  // Auto-height reporter: tells the parent page exactly how tall the tool's
+  // content is, so the Squarespace iframe resizes to fit with no clipping and
+  // no extra blank space.
   (function () {
+    var last = 0;
+    function measure() {
+      // Use the root app element's height where possible (tighter than body),
+      // falling back to the document height. This avoids trailing blank space.
+      var root = document.getElementById("root");
+      var h = root ? root.getBoundingClientRect().height : document.body.scrollHeight;
+      return Math.ceil(h);
+    }
     function postHeight() {
-      var h = document.body.scrollHeight;
-      if (window.parent) {
+      var h = measure();
+      if (h && h !== last && window.parent) {
+        last = h;
         window.parent.postMessage({ sparkScorecardHeight: h }, "*");
       }
     }
-    // Report on load, on resize, and whenever the DOM changes (React re-renders).
     window.addEventListener("load", postHeight);
     window.addEventListener("resize", postHeight);
     var mo = new MutationObserver(postHeight);
     mo.observe(document.body, { childList: true, subtree: true, attributes: true, characterData: true });
-    // Also poll briefly as a safety net for late layout shifts.
     var ticks = 0, t = setInterval(function () { postHeight(); if (++ticks > 20) clearInterval(t); }, 250);
   })();
 </script>
