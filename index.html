@@ -27,7 +27,7 @@ const LOGO = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAABVCAYAAAA4/D02
 //  Until you do, leads just log to the browser console (nothing breaks).
 //  Steps to get the URL are in the handover notes.
 // ============================================================
-const ZAPIER_WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/14360628/43iopy7/";  // e.g. "https://hooks.zapier.com/hooks/catch/123456/abcde/"
+const ZAPIER_WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/14360628/43iopy7/";
 
 const C = {
   ink: "#333031",
@@ -182,7 +182,7 @@ function App() {
       if (ZAPIER_WEBHOOK_URL && ZAPIER_WEBHOOK_URL.indexOf("http") === 0) {
         await fetch(ZAPIER_WEBHOOK_URL, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          mode: "no-cors",
           body: JSON.stringify(payload),
         });
       } else {
