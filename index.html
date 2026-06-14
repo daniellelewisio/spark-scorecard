@@ -324,5 +324,25 @@ function App() {
 
 ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
 </script>
+
+<script>
+  // Auto-height reporter: tells the parent page how tall the tool is, so the
+  // Squarespace iframe can resize and never clip the results screen.
+  (function () {
+    function postHeight() {
+      var h = document.body.scrollHeight;
+      if (window.parent) {
+        window.parent.postMessage({ sparkScorecardHeight: h }, "*");
+      }
+    }
+    // Report on load, on resize, and whenever the DOM changes (React re-renders).
+    window.addEventListener("load", postHeight);
+    window.addEventListener("resize", postHeight);
+    var mo = new MutationObserver(postHeight);
+    mo.observe(document.body, { childList: true, subtree: true, attributes: true, characterData: true });
+    // Also poll briefly as a safety net for late layout shifts.
+    var ticks = 0, t = setInterval(function () { postHeight(); if (++ticks > 20) clearInterval(t); }, 250);
+  })();
+</script>
 </body>
 </html>
