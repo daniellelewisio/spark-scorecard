@@ -11,7 +11,7 @@
 <style>
   html,body{margin:0;padding:0;background:#f4f2f0;font-family:ui-sans-serif,system-ui,-apple-system,sans-serif;}
   *{box-sizing:border-box;}
-  #root{max-width:680px;margin:24px auto;padding:0 16px;}
+  #root{max-width:680px;margin:24px auto;padding:0 16px 28px;}
   button{font-family:inherit;}
 </style>
 </head>
@@ -332,11 +332,20 @@ ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
   (function () {
     var last = 0;
     function measure() {
-      // Use the root app element's height where possible (tighter than body),
-      // falling back to the document height. This avoids trailing blank space.
+      // Measure the TRUE full content height. Take the largest of several
+      // signals so a vertically-centred or flex layout can never under-report
+      // (which previously caused the iframe to clip on mobile).
+      var b = document.body, d = document.documentElement;
+      var candidates = [
+        b.scrollHeight, b.offsetHeight,
+        d.scrollHeight, d.offsetHeight, d.clientHeight
+      ];
       var root = document.getElementById("root");
-      var h = root ? root.getBoundingClientRect().height : document.body.scrollHeight;
-      return Math.ceil(h);
+      if (root) {
+        candidates.push(root.scrollHeight);
+        candidates.push(root.getBoundingClientRect().bottom);
+      }
+      return Math.ceil(Math.max.apply(null, candidates));
     }
     function postHeight() {
       var h = measure();
