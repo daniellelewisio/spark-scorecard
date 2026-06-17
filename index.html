@@ -261,7 +261,7 @@ function App() {
           <Eyebrow>One quick thing</Eyebrow>
           <h2 style={{font:"800 clamp(26px,4vw,36px)/1.1 ui-sans-serif, system-ui",letterSpacing:"-0.01em",margin:"0 0 28px",maxWidth:520}}>Are you already inside SPARK?</h2>
           <div style={{display:"flex",gap:14,flexWrap:"wrap"}}>
-            <Btn kind="outline" onClick={()=>{window.open("https://sparkbusiness.global/start-here","_blank");setIsMember(true);setStage("quiz");}}>Yes, I'm a member</Btn>
+            <Btn kind="outline" onClick={()=>{window.open("https://sparkbusiness.global/ceo-scorecard-members","_blank");setIsMember(true);setStage("quiz");}}>Yes, I'm a member</Btn>
             <Btn kind="outline" onClick={()=>{setIsMember(false);setStage("quiz"); if(window.sparkTrack) window.sparkTrack("ScorecardStarted");}}>Not yet</Btn>
           </div>
           <p style={{font:"400 14px/1.6 ui-sans-serif, system-ui",color:C.muted,marginTop:28,maxWidth:480}}>Members go straight to their result and the hub to focus on. If you're not a member yet, we'll send your full result to your inbox.</p>
